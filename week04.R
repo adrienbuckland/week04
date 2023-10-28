@@ -6,7 +6,7 @@ disastersgrouped <- disasters %>%
   group_by(Entity)
 
 view(disastersgrouped)
-
+options(scipen = 999)
 
 
 df <- disasters %>%
@@ -44,26 +44,15 @@ library(glue)
   
     
 
-view(df)
 
-filtered_df <- df
-view(filtered_df)
 
 ggplot(data = filtered_df, aes(x = Year, y = deaths_all_disasters)) +
   geom_point()
 
 filtered_df <- df %>%
-  filter(Entity == "Soviet Union") #| Entity == "China" | Entity == "Afghanistan" | Entity == "Albania" | Entity == "Turkey")
+  filter(Entity == "Soviet Union" | Entity == "China" | Entity == "Afghanistan" | Entity == "Albania" | Entity == "Turkey")
 
-plotting <- function(x){
-  ggplot(data = filtered_df, aes(x = filtered_df[[2]], y = filtered_df[[3]])) +
-    geom_point() +
-    labs(
-      title = glue("{names(filtered_df)[3]} in {(filtered_df)[1,1]}"),
-      x = names(filtered_df[2]),
-      y = names(filtered_df[3])
-    )
-}
+  
 
 plotting <- function(i){
   ggplot(data = filtered_df, aes(x = filtered_df[[2]], y = filtered_df[[i]])) +
@@ -74,12 +63,10 @@ plotting <- function(i){
       y = names(filtered_df)[i]
     )
 }
+
 plots_list <- map(3:ncol(filtered_df), plotting)
+plots_grid <- gridExtra::grid.arrange(grobs = plots_list, ncol = 3) 
 
-plots_list <- map((filtered_df), plotting)
-plots_list
-plots_grid <- gridExtra::grid.arrange(grobs = plots_list) # Adjust ncol as needed
-view(filtered_df)
-df
-elev_plots = map(filtered_df, ~plotting(.x, "elev") )
-
+airquality
+df2 <- unique(filtered_df$Entity)
+view(df2)
